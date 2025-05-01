@@ -1,4 +1,5 @@
 """Event handler for clients of the server."""
+
 import argparse
 import json
 import logging
@@ -14,17 +15,17 @@ from wyoming.info import Describe, Info
 from wyoming.server import AsyncEventHandler
 from wyoming.tts import Synthesize
 
-from .process import PiperProcessManager
+from .process import xTTSProcessManager
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class PiperEventHandler(AsyncEventHandler):
+class xTTSEventHandler(AsyncEventHandler):
     def __init__(
         self,
         wyoming_info: Info,
         cli_args: argparse.Namespace,
-        process_manager: PiperProcessManager,
+        process_manager: xTTSProcessManager,
         *args,
         **kwargs,
     ) -> None:

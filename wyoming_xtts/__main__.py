@@ -12,8 +12,8 @@ from wyoming.server import AsyncServer
 
 from . import __version__
 from .download import find_voice, get_voices
-from .handler import PiperEventHandler
-from .process import PiperProcessManager
+from .handler import xTTSEventHandler
+from .process import xTTSProcessManager
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -184,7 +184,7 @@ async def main() -> None:
         ],
     )
 
-    process_manager = PiperProcessManager(args, voices_info)
+    process_manager = xTTSProcessManager(args, voices_info)
 
     # Make sure default voice is loaded.
     # Other voices will be loaded on-demand.
@@ -196,7 +196,7 @@ async def main() -> None:
     _LOGGER.info("Ready")
     await server.run(
         partial(
-            PiperEventHandler,
+            xTTSEventHandler,
             wyoming_info,
             args,
             process_manager,

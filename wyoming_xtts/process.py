@@ -14,7 +14,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
-class PiperProcess:
+class xTTSProcess:
     """Info for a running Piper process (one voice)."""
 
     name: str
@@ -55,16 +55,16 @@ def _is_multispeaker(config: Dict[str, Any]) -> bool:
 # -----------------------------------------------------------------------------
 
 
-class PiperProcessManager:
-    """Manager of running Piper processes."""
+class xTTSProcessManager:
+    """Manager of running xTTS processes."""
 
     def __init__(self, args: argparse.Namespace, voices_info: Dict[str, Any]):
         self.voices_info = voices_info
         self.args = args
-        self.processes: Dict[str, PiperProcess] = {}
+        self.processes: Dict[str, xTTSProcess] = {}
         self.processes_lock = asyncio.Lock()
 
-    async def get_process(self, voice_name: Optional[str] = None) -> PiperProcess:
+    async def get_process(self, voice_name: Optional[str] = None) -> xTTSProcess:
         """Get a running Piper process or start a new one if necessary."""
         voice_speaker: Optional[str] = None
         if voice_name is None:
@@ -151,7 +151,7 @@ class PiperProcessManager:
             _LOGGER.debug(
                 "Starting piper process: %s args=%s", self.args.piper, piper_args
             )
-            piper_proc = PiperProcess(
+            piper_proc = xTTSProcess(
                 name=voice_name,
                 proc=await asyncio.create_subprocess_exec(
                     self.args.piper,
