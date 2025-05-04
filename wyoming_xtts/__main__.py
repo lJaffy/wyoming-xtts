@@ -7,6 +7,7 @@ from functools import partial
 from pathlib import Path
 from typing import Any, Dict, Set
 
+
 from wyoming.info import Attribution, Info, TtsProgram, TtsVoice, TtsVoiceSpeaker
 from wyoming.server import AsyncServer
 
@@ -60,8 +61,13 @@ async def main() -> None:
     )
     _LOGGER.debug(args)
     model = load_model_from_name("tts_models/multi-dataset/xtts_v2")
-    speaker = generate_custom_speaker(model, "Geralt", [])
-    register_custom_speaker(model, speaker)
+
+    for path in Path("./custom/").glob("*"):
+        custom_voice_name = path.stem
+        custom_speaker = generate_custom_speaker(
+            model, custom_voice_name, list(path.glob("*.wav"))
+        )
+        register_custom_speaker(model, custom_speaker)
     voices = []
     print("Loading Voices")
     for speaker in model.speaker_manager.speaker_names:

@@ -44,13 +44,7 @@ def generate_custom_speaker(
     model: Xtts, name: str, audio_samples=list[Path]
 ) -> CustomSpeaker:
     gpt_cond_latent, speaker_embedding = model.get_conditioning_latents(
-        audio_path=[
-            "./geralt/0x00112c9e.wav",
-            "./geralt/0x0012514f.wav",
-            "./geralt/0x001136dd.wav",
-            "./geralt/0x0011351f.wav",
-            "./geralt/0x0011fc7c.wav",
-        ],
+        audio_path=audio_samples,
         sound_norm_refs=True,
     )
     return CustomSpeaker(
