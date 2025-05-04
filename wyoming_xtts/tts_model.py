@@ -69,11 +69,15 @@ def register_custom_speaker(model: Xtts, speaker: CustomSpeaker) -> None:
     }
 
 
-def stream_text(model: Xtts, text: str, speaker: CustomSpeaker):
+def stream_text(model: Xtts, text: str, speaker_name: str):
     chunks: Iterable[torch.Tensor] = model.inference_stream(
         text,
         enable_text_splitting=False,
-        **speaker.model_dump(),
+        gpt_cond_latent=model.speaker_manager.speakers[speaker_name]["gpt_cond_latent"],
+        speaker_embedding=model.speaker_manager.speakers[speaker_name][
+            "speaker_embedding"
+        ],
+        language="en",
     )
 
     for i, chunk in enumerate(chunks):

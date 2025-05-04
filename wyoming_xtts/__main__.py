@@ -17,6 +17,7 @@ from .process import xTTSProcessManager
 from .tts_model import (
     load_model_from_name,
     generate_custom_speaker,
+    register_custom_speaker,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,17 +61,22 @@ async def main() -> None:
     _LOGGER.debug(args)
     model = load_model_from_name("tts_models/multi-dataset/xtts_v2")
     speaker = generate_custom_speaker(model, "Geralt", [])
-
-    voices = [
-        TtsVoice(
-            name="Geralt_1",
-            description="Super geralt",
-            version=None,
-            attribution=Attribution(name="", url=""),
-            installed=True,
-            languages=["en"],
+    register_custom_speaker(model, speaker)
+    voices = []
+    print("Loading Voices")
+    for speaker in model.speaker_manager.speaker_names:
+        print(f"Speaker: {speaker}")
+        print(model.speaker_manager.speakers[speaker].keys())
+        voices.append(
+            TtsVoice(
+                name=speaker,
+                description=speaker,
+                version=None,
+                attribution=Attribution(name="", url=""),
+                installed=True,
+                languages=["en"],
+            )
         )
-    ]
 
     wyoming_info = Info(
         tts=[

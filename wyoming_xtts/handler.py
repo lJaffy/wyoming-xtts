@@ -13,7 +13,7 @@ from wyoming.error import Error
 from wyoming.event import Event
 from wyoming.info import Describe, Info
 from wyoming.server import AsyncEventHandler
-from wyoming.tts import Synthesize
+from wyoming.tts import Synthesize, SynthesizeVoice
 
 from .process import xTTSProcessManager
 from .tts_model import (
@@ -73,7 +73,9 @@ class xTTSEventHandler(AsyncEventHandler):
         _LOGGER.debug(synthesize)
 
         raw_text = synthesize.text
-
+        if synthesize.voice is None:
+            synthesize.voice = SynthesizeVoice(name="Geralt")
+            print(synthesize.voice)
         # Join multiple lines
         text = " ".join(raw_text.strip().splitlines())
 
@@ -89,7 +91,7 @@ class xTTSEventHandler(AsyncEventHandler):
             ).event(),
         )
 
-        for chunk in stream_text(self.model, text, self.speaker):
+        for chunk in stream_text(self.model, text, synthesize.voice.name):
             await self.write_event(
                 AudioChunk(
                     audio=chunk,
