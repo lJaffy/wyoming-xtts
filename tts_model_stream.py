@@ -20,7 +20,7 @@ model.load_checkpoint(
     use_deepspeed=False,
 )
 # model.cuda()
-
+print(model.speaker_manager.speaker_names)
 print("Computing speaker latents...")
 gpt_cond_latent, speaker_embedding = model.get_conditioning_latents(
     audio_path=[
@@ -30,8 +30,10 @@ gpt_cond_latent, speaker_embedding = model.get_conditioning_latents(
         "./geralt/0x0011351f.wav",
         "./geralt/0x0011fc7c.wav",
     ],
+    sound_norm_refs=True,
 )
 stream = True
+print(speaker_embedding)
 print("Inference...")
 t0 = time.time()
 if stream:
